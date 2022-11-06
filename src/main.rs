@@ -1,51 +1,61 @@
 use yew::prelude::*;
 
-enum Msg {
-    AddOne,
-    AddTwo,
+struct Video {
+    id: usize,
+    title: String,
+    speaker: String,
+    url: String,
 }
 
-struct Model {
-    value: i64,
-}
-
-impl Component for Model {
-    type Message = Msg;
-    type Properties = ();
-
-    fn create(_ctx: &Context<Self>) -> Self {
-        Self { value: 0 }
-    }
-
-    fn update(&mut self, _ctx: &Context<Self>, msg: Self::Message) -> bool {
-        match msg {
-            Msg::AddOne => {
-                self.value += 1;
-                // The value has changed so we need to re-render for it
-                // to appear on the page.
-                true
+#[function_component(App)]
+fn app() -> Html {
+    let videos = vec![
+        Video {
+            id: 1,
+            title: "Building and Breaking Things".to_string(),
+            speaker: "John Doe".to_string(),
+            url: "https://youtu.be/PsaFVLr8t4E".to_string(),
+        },
+        Video {
+            id: 2,
+            title: "The Development Process".to_string(),
+            speaker: "Jane Smith".to_string(),
+            url: "https://youtu.be/PsaFVLr8t4E".to_string(),
+        },
+        Video {
+            id: 3,
+            title: "The Web 7.0".to_string(),
+            speaker: "Matt Millre".to_string(),
+            url: "https://youtu.be/PsaFVLr8t4E".to_string(),
+        },
+        Video {
+            id: 4,
+            title: "Mouseless Development".to_string(),
+            speaker: "Tom Jerry".to_string(),
+            url: "https://youtu.be/PsaFVLr8t4E".to_string(),
+        },
+    ];
+    let videos = videos
+        .iter()
+        .map(|video| {
+            html! {
+                        <p>{format!("{}: {}", video.speaker, video.title)}</p>
             }
-            Msg::AddTwo => {
-                self.value += 2;
-                true
-            }
-        }
-    }
-
-    fn view(&self, ctx: &Context<Self>) -> Html {
-        // This gives us a component's "`Scope`" which allows us to send messages, etc
-        // to the component.
-        let link = ctx.link();
-        html! {
+        })
+        .collect::<Html>();
+    html! {
+        <>
+            <h1>{ "RustConf Explorer" }</h1>
             <div>
-                <button onclick={link.callback(|_| Msg::AddOne)}>{ "+1" }</button>
-                <button onclick={link.callback(|_| Msg::AddTwo)}>{ "+2" }</button>
-                <p>{self.value}</p>
+                <h3>{ "Videos to watch" }</h3>
+                { videos }
             </div>
-        }
+        </>
     }
 }
 
 fn main() {
-    yew::start_app::<Model>();
+    yew::start_app::<App>();
 }
+
+
